@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Cores extraídas da sua logo */
+  --logo-dark: #1F2E5B;
+  --logo-light: #16C8A6;
 }
 
 @theme inline {
@@ -10,6 +13,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Adicionando as cores ao tema do Tailwind */
+  --color-logo-dark: var(--logo-dark);
+  --color-logo-light: var(--logo-light);
 }
 
 @media (prefers-color-scheme: dark) {
