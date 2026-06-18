@@ -38,6 +38,12 @@ export default function RootLayout({
 
   return (
     <html lang="pt-br" className={`${inter.variable} ${jetbrainsMono.variable} scroll-smooth`}>
+      <head>
+        <title>Benício Jorente | Portfolio</title>
+        <meta name="description" content="Graduado em Engenharia de Software e Especialista em QA Automation e Web Dev." />
+        <link rel="icon" href="/images/logo-ultima.png" type="image/png" />
+      </head>
+
       <body className="font-sans antialiased bg-[#050B1A] text-[#F8FAFC]">
 
         {/* NAVBAR*/}
