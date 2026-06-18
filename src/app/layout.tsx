@@ -79,6 +79,11 @@ export default function RootLayout({
                   &lt;projetos /&gt;
                 </Link>
               </li>
+              <li>
+                <Link href="/laboratorio" className="px-5 py-2.5 rounded-full transition-all text-[#38BDF8] hover:text-[#F8FAFC] hover:bg-white/5 font-mono">
+                  &lt;lab_testes /&gt;
+                </Link>
+              </li>
               <li className="ml-4">
                 <Link href="#contato" className="px-6 py-2.5 rounded-xl transition-all bg-[#3B82F6] text-white font-mono hover:bg-[#60A5FA] shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20">
                   contato.init()
@@ -116,6 +121,9 @@ export default function RootLayout({
               <Link href="#projetos" onClick={() => setIsMenuOpen(false)} className="px-6 py-4 text-sm hover:text-[#3B82F6] transition-colors border-b border-white/5">
                 // projetos & QA
               </Link>
+              <Link href="/laboratorio" onClick={() => setIsMenuOpen(false)} className="px-6 py-4 text-sm text-[#38BDF8] hover:text-[#3B82F6] transition-colors border-b border-white/5">
+                // laboratorio de testes
+              </Link>
               <Link href="#contato" onClick={() => setIsMenuOpen(false)} className="px-6 py-4 text-sm text-[#3B82F6] transition-colors">
                 // contato
               </Link>
@@ -151,6 +159,7 @@ export default function RootLayout({
                   <Link href="#inicio" className="text-sm font-medium text-[#94A3B8] hover:text-[#3B82F6] transition-colors">Início</Link>
                   <Link href="#sobre" className="text-sm font-medium text-[#94A3B8] hover:text-[#3B82F6] transition-colors">Sobre Mim</Link>
                   <Link href="#projetos" className="text-sm font-medium text-[#94A3B8] hover:text-[#3B82F6] transition-colors">Projetos & QA</Link>
+                  <Link href="/laboratorio" className="text-sm font-medium text-[#38BDF8] hover:text-[#3B82F6] transition-colors">Lab de Testes</Link>
                 </nav>
               </div>
               <div className="flex flex-col gap-4">
