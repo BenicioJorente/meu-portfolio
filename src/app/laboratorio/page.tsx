@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface Transaction {
@@ -13,6 +13,11 @@ interface Transaction {
 }
 
 export default function Laboratorio() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   const [transactions, setTransactions] = useState<Transaction[]>([
     { id: 1, description: "Freelance Web Design", amount: 3500, type: "income", category: "Desenvolvimento", date: "2026-06-15" },
     { id: 2, description: "Licença Adobe Cloud", amount: 124, type: "outcome", category: "Ferramentas", date: "2026-06-14" },
@@ -25,6 +30,30 @@ export default function Laboratorio() {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"income" | "outcome">("income");
   const [category, setCategory] = useState("Desenvolvimento");
+
+  useEffect(() => {
+    const session = localStorage.getItem("lab-token");
+    if (session === "authenticated-active") {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError("");
+
+    if (email === "admin@teste.com" && password === "admin123") {
+      localStorage.setItem("lab-token", "authenticated-active");
+      setIsLoggedIn(true);
+    } else {
+      setLoginError("Credenciais inválidas. Use admin@teste.com e admin123.");
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("lab-token");
+    setIsLoggedIn(false);
+  };
 
   const totalIncome = transactions
     .filter((t) => t.type === "income")
@@ -65,15 +94,89 @@ export default function Laboratorio() {
     setTransactions(transactions.filter((t) => t.id !== id));
   };
 
+  if (!isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-[#050B1A] text-[#F8FAFC] font-sans flex items-center justify-center p-6 pt-28">
+        <div data-cy="login-card" className="w-full max-w-md p-8 rounded-2xl bg-[#0B1120] border border-white/5 shadow-2xl">
+          <div className="mb-6 text-center">
+            <h1 className="text-2xl font-bold font-mono text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#38BDF8]">
+              &lt;lab_login /&gt;
+            </h1>
+            <p className="text-xs text-[#94A3B8] mt-2">
+              Faça login para acessar o ambiente de automação.
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#475569]">E-mail</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                data-cy="login-input-email"
+                placeholder="admin@teste.com"
+                className="px-4 py-2.5 rounded-xl bg-[#050B1A] border border-white/5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors font-mono"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-mono text-[#475569]">Senha</label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                data-cy="login-input-password"
+                placeholder="••••••••"
+                className="px-4 py-2.5 rounded-xl bg-[#050B1A] border border-white/5 text-sm focus:outline-none focus:border-[#3B82F6] transition-colors font-mono"
+              />
+            </div>
+
+            {loginError && (
+              <div data-cy="login-error-message" className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono">
+                {loginError}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              data-cy="login-btn-submit"
+              className="w-full py-3 rounded-xl bg-[#3B82F6] hover:bg-[#60A5FA] text-white font-mono text-sm transition-all mt-2 shadow-lg shadow-blue-500/10"
+            >
+              Autenticar.init()
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <Link href="/" className="text-xs font-mono text-[#475569] hover:text-[#38BDF8] transition-colors">
+              &larr; Voltar ao início
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#050B1A] text-[#F8FAFC] font-sans pt-28 pb-12 selection:bg-blue-500/30">
       <div className="max-w-7xl mx-auto px-6">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-white/5">
           <div>
-            <Link href="/" className="text-xs font-mono text-[#38BDF8] hover:underline mb-2 block">
-              &larr; Voltar para o Portfólio
-            </Link>
+            <div className="flex items-center gap-4 mb-2">
+              <Link href="/" className="text-xs font-mono text-[#38BDF8] hover:underline">
+                &larr; Voltar para o Portfólio
+              </Link>
+              <button 
+                onClick={handleLogout}
+                data-cy="btn-logout"
+                className="text-xs font-mono text-rose-400 hover:underline bg-transparent border-none p-0 cursor-pointer"
+              >
+                // Sair do Lab
+              </button>
+            </div>
             <h1 className="text-3xl font-bold font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#38BDF8]">
               &lt;automation_playground /&gt;
             </h1>
@@ -173,7 +276,7 @@ export default function Laboratorio() {
         <div data-cy="modal-overlay" className="fixed inset-0 z-150 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn">
           <div data-cy="modal-content" className="w-full max-w-md rounded-2xl bg-[#0B1120] border border-white/10 overflow-hidden shadow-2xl">
             
-            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-[#050B1A]/40">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-[#050A1A]/40">
               <h3 className="font-mono text-sm font-bold text-[#F8FAFC]">// Cadastrar Transação</h3>
               <button
                 onClick={() => setIsModalOpen(false)}
